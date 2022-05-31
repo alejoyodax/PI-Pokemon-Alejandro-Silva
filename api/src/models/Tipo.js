@@ -7,13 +7,13 @@ module.exports = (sequelize) => {
         id: {
             type: DataTypes.UUID,
             allowNull: false,
-            primaryKey: true,
             defaultValue: DataTypes.UUIDV4
         },
 
         idPokeApi: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            autoIncrement: true,        // ESTO NO DA PROBLEMAS, ESXCEPTO SI QUIERO AGREGAR UN NUEVO VALOR SIN ESTE DATO
+            primaryKey: true,
         },
 
         nombre: {
@@ -21,5 +21,11 @@ module.exports = (sequelize) => {
             allowNull: false,
         },
 
-    });
+    },
+        {
+            timestamps: false
+        }
+
+
+    );
 };
