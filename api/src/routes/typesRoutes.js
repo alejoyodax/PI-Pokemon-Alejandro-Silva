@@ -49,7 +49,7 @@ router.post("/agregar", async (req, res) => {
         { idPokeApi: '10002', nombre: 'shadow' }
     ])
     // console.log("TIPOS DE POKEMON AGREGADOS CORRECTAMENTE A LA BD")
-    res.status(200).send("AGREGADOS CORRECTAMENTE A LA BD")
+
 
     // ##############################################################
     // AGREGAMOS POKEMONS
@@ -86,7 +86,7 @@ router.post("/agregar", async (req, res) => {
 
     const pokemon2 = await Pokemon.create({
         // id: 1,
-        nombre: 'Dana',
+        nombre: 'dana',
         vida: 78,
         fuerza: 58,
         defensa: 38,
@@ -113,13 +113,12 @@ router.post("/agregar", async (req, res) => {
 
     // console.log((await Pokemon.findByPk(1)).dataValues)
     pp("- DATOS AGREGADOS EXITOSAMENTE -")
+    res.status(200).send({ message: "AGREGADOS CORRECTAMENTE A LA BD" })
 
 })
 
-
 // COMO LO DE ARRIBA PERO CON
 router.post("/agregarpokemones", async (req, res) => {
-
 
 })
 

@@ -5,7 +5,16 @@ const {
     LIMIT_POKEMON
 } = process.env;
 
-const POKEMONS_LIMIT = 36
+const POKEMONS_LIMIT = 10
+
+// FUNCION GENERADORA DE UN OBJETO ERROR
+function newError(message, status) {
+    let err = new Error(message)
+    err.status = status || 500
+    return err
+}
+
+
 
 // ################# FUNCIONES MAPEADORAS ################## //
 
@@ -35,7 +44,6 @@ function mapUtilInfoPokemonPoke(pokemon) {
 
 }
 
-
 // CREA UNA LISTA CON LOS TIPOS DEVUELTOS POR SEQUELIZE (getTipos) DE UN POKEMON
 function mapUtilInfoTipo(tipos) {
     let listTipos = tipos.map((tipo) => {
@@ -47,6 +55,7 @@ function mapUtilInfoTipo(tipos) {
     return listTipos
 }
 
+// DEVUELVE UN OBJETO SOLO CON CIERTOS DATOS DEL POKEMON
 function mapUtilInfoPokemonBD(foundPokemonBD) {
     return {
         "id": foundPokemonBD.id2,
@@ -63,12 +72,8 @@ function mapUtilInfoPokemonBD(foundPokemonBD) {
 
 // ################ PETICIONES #################### //
 
-// DEVUELVE UN OBJETO SOLO CON CIERTOS DATOS DEL POKEMON
 
-
-
-
-// RETORNA UNA LISTA DE TODOS LOS POKEMONES TANTO EN POKE-API COMO LOS CREADOS
+// RETORNA TODOS LOS POKEMONES EXISTENTES EN POKE-API
 async function getAllPokemonsPokeApi() {
     // await axios.get(`${BASE_URL}/pokemon?offset=20&limit=40`)
     const URL_POKE_API = `https://pokeapi.co/api/v2/pokemon/?limit=${POKEMONS_LIMIT}`
@@ -77,17 +82,18 @@ async function getAllPokemonsPokeApi() {
     // console.log(data)
     let listPromises = []
 
-    listPokemons.data.results.forEach((p) => {
+    listPokemons.data.results.forEach((pokemon) => {
         // console.log(p.url)
 
-        listPromises.push(axios.get(p.url))
+        listPromises.push(axios.get(pokemon.url))
 
     })
+
     let listUtilPokemon = []
     await Promise.all(listPromises).then(
         responses => {
             responses.forEach(res => {
-                console.log(res.data.name)
+                // console.log(res.data.name)
                 listUtilPokemon.push(mapUtilInfoPokemonPoke(res.data))
             })
         }
@@ -97,7 +103,7 @@ async function getAllPokemonsPokeApi() {
     return listUtilPokemon
 }
 
-
+// RETORNA TODOS LOS POKEMONES EXISTENTES EN BD
 async function getAllPokemonsBD() {
     const response = await Pokemon.findAll({
         include: Tipo
@@ -121,6 +127,7 @@ async function getAllPokemonsBD() {
     return listPokemons
 }
 
+// RETORNA EL POKEMON QUE CONCIDA EXACTAMENTE CON EL NOMBRE PASADO
 async function getPokemonByName(namePokemon) {
     const name = namePokemon.toLowerCase()
     if (name.length < 3) throw new Error("Nombre no válido")
@@ -142,20 +149,21 @@ async function getPokemonByName(namePokemon) {
         let foundPokemonPoke;
         await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
             .then(r => foundPokemonPoke = r.data)
-            .catch(e => { throw new Error(`No existe el pokemon llamado: ${namePokemon}`) })
+            .catch(e => {   // SI POKEMON NO EXISTE NI EN BD NI EN POKE-API
+                throw newError(`No existe el pokemon llamado ${name}`, 404)
+            })
     }
 
-    // if (!foundPokemonPoke)  // SI NO EXISTE EL POKEMON EN LA POKE-API
-    //     throw new Error(message = `No existe el pokemon llamado: ${namePokemon}`, status = 404)
     return mapUtilInfoPokemonPoke(foundPokemonPoke)
 }
 
-
+// RETORNA EL POKEMON QUE CONCIDA CON EL ID PASADO
+// NOTA: LOS IDs DE LOS POKEMONES DE LA BD COMIENZAN CON UNA "A" SEGUIDO DE SOLAMENTE DÍGITOS DEL 1-9. EJ: "A1"
 async function getPokemonById(idPokemon) {
     if (!idPokemon) throw new Error("No se ha suministrado el ID")
-    if (idPokemon[0] === "a" || idPokemon[0] === "A") {  // ES UN TIPO DE ID DE LA BD?: BUSCAR EN LA BD
+    if (idPokemon[0] === "a" || idPokemon[0] === "A") {  // ES UN TIPO DE ID DE LA BD?: 
         // console.log("BUSCAR EN BD POR ID")
-        const foundPokemonBD = await Pokemon.findByPk(idPokemon.slice(1))
+        const foundPokemonBD = await Pokemon.findByPk(idPokemon.slice(1))   // BUSCAR EN LA BD
 
         if (foundPokemonBD) {   // SI EL ID EXISTE EN LA BD
             // console.log(foundPokemonBD.dataValues)
@@ -167,10 +175,9 @@ async function getPokemonById(idPokemon) {
 
     }
     // SI LLEGA A ESTE PUNTO ES PORQUE NO SE ENCONTRÓ EL ID EN NUESTRA BASE DE DATOS
-    // BUSCAR EN LA POKE-API
     if (isNaN(idPokemon)) throw new Error(`No existe el pokemon con el id: ${idPokemon}`)
     let foundPokemonPoke;
-    await axios.get(`https://pokeapi.co/api/v2/pokemon/${idPokemon}`)
+    await axios.get(`https://pokeapi.co/api/v2/pokemon/${idPokemon}`) // BUSCAR EN LA POKE-API
         .then(r => foundPokemonPoke = r.data)
         .catch(e => { throw new Error(`No existe el pokemon con el id: ${idPokemon}`) })
 
@@ -179,10 +186,63 @@ async function getPokemonById(idPokemon) {
 
 }
 
+// RECIBE UN OBJETO Y CON SUS PROPIEDADES CREA UN POKEMON EN LA BD
+async function createPokemonBD(pokemonToCreate) {
+    function isValidPokemon(pokemonToCreate) {
+        const EXAMPLE = {
+            "nombre": "prueba",
+            "vida": 99,
+            "fuerza": 99,
+            "defensa": 99,
+            "velocidad": 99,
+            "img": "https://ejemplo-de-pokemon.com",
+            "tipos": [11, 15]
+        }
+        // VERIFICA LA EXISTENCIA DE SUS PROPIEDADES
+        const propsPokemonToCreate = Object.getOwnPropertyNames(pokemonToCreate) // CREAMOS UN ARRAY CON LAS PROPIEDADES DEL OBJETO pokemonToCreate
+        const propsEXAMPLE = Object.getOwnPropertyNames(EXAMPLE)    // LO MISMO DE ARRIBA PERO CON EL OBJETO EXAMPLE
+        if (propsPokemonToCreate.length !== propsEXAMPLE.length) {
+            console.log("FALTAN PROPIEDADES")
+            // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
+            return false
+        }
+
+        // VERIFICA TIPO DE DATO DE CADA PROPIEDAD
+        for (const [key, value] of Object.entries(pokemonToCreate)) {
+            console.log(`KEY: ${key} - VALUE: ${value}`)
+            if (typeof (value) !== typeof (EXAMPLE[key])) {
+                console.log(`ERROR EN LA PROPIEDAD: ${key}`)
+                // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
+                return false
+            }
+        }
+
+        // VERIFICA LA PROPIEDAD TIPOS (ARRAY) CONTENGA SOLO NÚMEROS
+        for (var i = 0; i < pokemonToCreate.tipos.length; i++) {
+            if (isNaN(pokemonToCreate.tipos[i])) {
+                console.log(`ERROR EN LA PROPIEDAD: tipos`)
+                // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
+                return false
+            }
+        }
+
+        return true// SI EL POKEMON CUMPLE CON TODOS LOS REQUISITOS
+    }
+
+    if (!isValidPokemon(pokemonToCreate)) {
+        // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA")
+        throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
+    }
+
+    console.log("POKEMON CREADO!")
+    return true
+
+}
 
 module.exports = {
     getAllPokemonsPokeApi,
     getAllPokemonsBD,
     getPokemonByName,
-    getPokemonById
+    getPokemonById,
+    createPokemonBD
 }

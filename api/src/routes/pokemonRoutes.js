@@ -6,10 +6,11 @@ const {
     getAllPokemonsPokeApi,
     getAllPokemonsBD,
     getPokemonByName,
-    getPokemonById } = require("../controllers/pokemonController.js")
+    getPokemonById,
+    createPokemonBD } = require("../controllers/pokemonController.js")
+
 
 // /api/pokemons/
-// 
 router.get("/", async (req, res, next) => {
     console.log("PETICION RECIBIDA...")
     const namePokemon = req.query.name
@@ -30,7 +31,6 @@ router.get("/", async (req, res, next) => {
             res.status(200).send(foundPokemon)
         }
 
-
     } catch (error) {
         next(error)
     }
@@ -50,33 +50,24 @@ router.get("/:idPokemon", async (req, res, next) => {
 })
 
 
+router.post("/", async (req, res, next) => {
+    const pokemonToCreate = req.body
+    if (!pokemonToCreate) res.status(400).send({ error: { message: "INFORMACIÓN NECESARIA NO SUMINISTRADA" } })
+
+    try {
+        await createPokemonBD(pokemonToCreate)
+        res.status(200).send({ message: "Pokemon creado correctamente" })
+
+    } catch (error) {
+        next(error)
+    }
+
+})
+
+
 
 
 
 
 
 module.exports = router; // EXPORTAMOS EL ROUTER CON NUESTRAS RUTAS
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
