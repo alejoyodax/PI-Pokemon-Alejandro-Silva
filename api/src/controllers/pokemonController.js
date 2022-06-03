@@ -1,11 +1,12 @@
 const axios = require("axios");
 const { Tipo, Pokemon } = require("../db.js")
+var Promise = require("bluebird");
 
 const {
     LIMIT_POKEMON
 } = process.env;
 
-const POKEMONS_LIMIT = 10
+const POKEMONS_LIMIT = 36
 
 // FUNCION GENERADORA DE UN OBJETO ERROR
 function newError(message, status) {
@@ -69,6 +70,50 @@ function mapUtilInfoPokemonBD(foundPokemonBD) {
 }
 
 
+// ############### FUNCIONES VALIDADORAS ########################## //
+
+// RECIBE EL OBJETO QUE REPRESENTA UN POKEMON Y LO VALIDA COMPLETAMENTE
+function isValidPokemon(pokemonToCreate) {
+    const EXAMPLE = {
+        "nombre": "prueba",
+        "vida": 99,
+        "fuerza": 99,
+        "defensa": 99,
+        "velocidad": 99,
+        "img": "https://ejemplo-de-pokemon.com",
+        "tipos": [11, 15]
+    }
+    // VERIFICA LA EXISTENCIA DE SUS PROPIEDADES
+    const propsPokemonToCreate = Object.getOwnPropertyNames(pokemonToCreate) // CREAMOS UN ARRAY CON LAS PROPIEDADES DEL OBJETO pokemonToCreate
+    const propsEXAMPLE = Object.getOwnPropertyNames(EXAMPLE)    // LO MISMO DE ARRIBA PERO CON EL OBJETO EXAMPLE
+    if (propsPokemonToCreate.length !== propsEXAMPLE.length) {
+        console.log("FALTAN PROPIEDADES")
+        // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
+        return false
+    }
+
+    // VERIFICA TIPO DE DATO DE CADA PROPIEDAD
+    for (const [key, value] of Object.entries(pokemonToCreate)) {
+        console.log(`KEY: ${key} - VALUE: ${value}`)
+        if (typeof (value) !== typeof (EXAMPLE[key])) {
+            console.log(`ERROR EN LA PROPIEDAD: ${key}`)
+            // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
+            return false
+        }
+    }
+
+    // VERIFICA LA PROPIEDAD TIPOS (ARRAY) CONTENGA SOLO NÚMEROS
+    if (pokemonToCreate.tipos.length === 0) return false
+    for (var i = 0; i < pokemonToCreate.tipos.length; i++) {
+        if (isNaN(pokemonToCreate.tipos[i])) {
+            console.log(`ERROR EN LA PROPIEDAD: tipos`)
+            // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
+            return false
+        }
+    }
+
+    return true// SI EL POKEMON CUMPLE CON TODOS LOS REQUISITOS
+}
 
 // ################ PETICIONES #################### //
 
@@ -79,15 +124,15 @@ async function getAllPokemonsPokeApi() {
     const URL_POKE_API = `https://pokeapi.co/api/v2/pokemon/?limit=${POKEMONS_LIMIT}`
 
     const listPokemons = (await axios.get(URL_POKE_API).catch(e => { throw new Error("Error al solicitar la información") }))
-    // console.log(data)
+
     let listPromises = []
-
+    // AGREGAMOS LAS PETICIONES DE CADA POKEMON A UN ARRAY
     listPokemons.data.results.forEach((pokemon) => {
-        // console.log(p.url)
-
         listPromises.push(axios.get(pokemon.url))
-
     })
+
+    console.log(listPromises.length)
+    console.log(listPromises.slice(0, 10).length)
 
     let listUtilPokemon = []
     await Promise.all(listPromises).then(
@@ -97,7 +142,9 @@ async function getAllPokemonsPokeApi() {
                 listUtilPokemon.push(mapUtilInfoPokemonPoke(res.data))
             })
         }
-    )
+    ).catch(error => {
+        throw new Error(error.message)
+    })
 
     // console.log(listPromises)
     return listUtilPokemon
@@ -152,9 +199,8 @@ async function getPokemonByName(namePokemon) {
             .catch(e => {   // SI POKEMON NO EXISTE NI EN BD NI EN POKE-API
                 throw newError(`No existe el pokemon llamado ${name}`, 404)
             })
+        return mapUtilInfoPokemonPoke(foundPokemonPoke)
     }
-
-    return mapUtilInfoPokemonPoke(foundPokemonPoke)
 }
 
 // RETORNA EL POKEMON QUE CONCIDA CON EL ID PASADO
@@ -188,55 +234,47 @@ async function getPokemonById(idPokemon) {
 
 // RECIBE UN OBJETO Y CON SUS PROPIEDADES CREA UN POKEMON EN LA BD
 async function createPokemonBD(pokemonToCreate) {
-    function isValidPokemon(pokemonToCreate) {
-        const EXAMPLE = {
-            "nombre": "prueba",
-            "vida": 99,
-            "fuerza": 99,
-            "defensa": 99,
-            "velocidad": 99,
-            "img": "https://ejemplo-de-pokemon.com",
-            "tipos": [11, 15]
-        }
-        // VERIFICA LA EXISTENCIA DE SUS PROPIEDADES
-        const propsPokemonToCreate = Object.getOwnPropertyNames(pokemonToCreate) // CREAMOS UN ARRAY CON LAS PROPIEDADES DEL OBJETO pokemonToCreate
-        const propsEXAMPLE = Object.getOwnPropertyNames(EXAMPLE)    // LO MISMO DE ARRIBA PERO CON EL OBJETO EXAMPLE
-        if (propsPokemonToCreate.length !== propsEXAMPLE.length) {
-            console.log("FALTAN PROPIEDADES")
-            // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
-            return false
-        }
-
-        // VERIFICA TIPO DE DATO DE CADA PROPIEDAD
-        for (const [key, value] of Object.entries(pokemonToCreate)) {
-            console.log(`KEY: ${key} - VALUE: ${value}`)
-            if (typeof (value) !== typeof (EXAMPLE[key])) {
-                console.log(`ERROR EN LA PROPIEDAD: ${key}`)
-                // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
-                return false
-            }
-        }
-
-        // VERIFICA LA PROPIEDAD TIPOS (ARRAY) CONTENGA SOLO NÚMEROS
-        for (var i = 0; i < pokemonToCreate.tipos.length; i++) {
-            if (isNaN(pokemonToCreate.tipos[i])) {
-                console.log(`ERROR EN LA PROPIEDAD: tipos`)
-                // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
-                return false
-            }
-        }
-
-        return true// SI EL POKEMON CUMPLE CON TODOS LOS REQUISITOS
-    }
-
     if (!isValidPokemon(pokemonToCreate)) {
         // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA")
         throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
     }
 
-    console.log("POKEMON CREADO!")
-    return true
+    const newPokemon = await Pokemon.create({
+        // id: INCREMENTAL,
+        nombre: pokemonToCreate.nombre.toLowerCase(),
+        vida: pokemonToCreate.vida,
+        fuerza: pokemonToCreate.fuerza,
+        defensa: pokemonToCreate.defensa,
+        velocidad: pokemonToCreate.velocidad,
+        // altura: pokemonToCreate.altura,
+        // peso: pokemonToCreate.peso,
+        img: pokemonToCreate.img,
+    }
+    )
 
+
+    newPokemon.id2 = "A" + newPokemon.id    // AGREGAMOS EL ID2 AL POKEMON
+    await newPokemon.save()   // GUARDAMOS EL ID2
+
+    // AGREGAMOS LOS TIPOS A LOS QUE PERTENECE EL POKEMON
+    for (let i = 0; i < pokemonToCreate.tipos.length; i++) {
+        const idTipo = pokemonToCreate.tipos[i]
+        const tipoPokemonBD = await Tipo.findByPk(idTipo)
+        if (!tipoPokemonBD) throw newError(`NO EXISTE EL ID ${idTipo} DE TIPO DE POKEMON`, 400)
+        await newPokemon.addTipos(tipoPokemonBD)
+    }
+
+
+
+    // pokemonToCreate.tipos.forEach(async (idTipo) => {
+    //     const tipoPokemonBD = await Tipo.findByPk(idTipo)
+    //     if (!tipoPokemonBD) throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
+    //     await newPokemon.addTipos(tipoPokemonBD)
+
+    // })
+
+    console.log("POKEMON CREADO!")
+    return
 }
 
 module.exports = {

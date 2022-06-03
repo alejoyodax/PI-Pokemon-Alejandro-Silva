@@ -1,4 +1,5 @@
 const axios = require('axios')
+const { response } = require('express')
 const { Router } = require('express') // IMPORTAMOS EL ROUTER DE EXPRESS
 
 const router = Router() // CREAR UNA INSTANCIA DEL ROUTER DE EXPRESS
@@ -16,16 +17,16 @@ router.get("/", async (req, res, next) => {
     const namePokemon = req.query.name
 
     try {
-        if (!namePokemon) { // SI NO SE SUMINISTRA EL NOMBRE
+        if (!namePokemon) {
             const allPokemonsPoke = await getAllPokemonsPokeApi()
             const allPokemonsBD = await getAllPokemonsBD()
             // console.log("ALL POKEMONS IN DB: ", allPokemonsBD)
             res.status(200).send([...allPokemonsBD, ...allPokemonsPoke])
 
         } else {
+            if (!isNaN(namePokemon)) throw new Error("Nombre de pokemon no válido") // SI EL NOMBRE SUMINISTRADO ES UN NÚMERO
             // SI SE SUMINISTRA EL NOMBRE DEL POKEMON
             // console.log("NOMBRE DEL POKEMON:", namePokemon)
-            if (typeof (namePokemon) !== "string") throw new Error("Nombre de pokemon no válido")
             const foundPokemon = await getPokemonByName(namePokemon)
             // console.log(foundPokemon)
             res.status(200).send(foundPokemon)
