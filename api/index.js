@@ -47,8 +47,8 @@ conn.sync({ force: true }).then(() => {
     { idPokeApi: '16', nombre: 'dragon' },
     { idPokeApi: '17', nombre: 'dark' },
     { idPokeApi: '18', nombre: 'fairy' },
-    // { idPokeApi: '10001', nombre: 'unknown' },
-    // { idPokeApi: '10002', nombre: 'shadow' }
+    { idPokeApi: '10001', nombre: 'unknown' },
+    { idPokeApi: '10002', nombre: 'shadow' }
   ])
 
 });

@@ -87,14 +87,14 @@ function isValidPokemon(pokemonToCreate) {
     const propsPokemonToCreate = Object.getOwnPropertyNames(pokemonToCreate) // CREAMOS UN ARRAY CON LAS PROPIEDADES DEL OBJETO pokemonToCreate
     const propsEXAMPLE = Object.getOwnPropertyNames(EXAMPLE)    // LO MISMO DE ARRIBA PERO CON EL OBJETO EXAMPLE
     if (propsPokemonToCreate.length !== propsEXAMPLE.length) {
-        console.log("FALTAN PROPIEDADES")
+        console.log("FALTAN PROPIEDADES O SE HAN SUMINISTRADO PROPIEDADES NO RECONOCIBLES")
         // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
         return false
     }
 
     // VERIFICA TIPO DE DATO DE CADA PROPIEDAD
     for (const [key, value] of Object.entries(pokemonToCreate)) {
-        console.log(`KEY: ${key} - VALUE: ${value}`)
+        // console.log(`KEY: ${key} - VALUE: ${value}`)
         if (typeof (value) !== typeof (EXAMPLE[key])) {
             console.log(`ERROR EN LA PROPIEDAD: ${key}`)
             // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
@@ -113,6 +113,19 @@ function isValidPokemon(pokemonToCreate) {
     }
 
     return true// SI EL POKEMON CUMPLE CON TODOS LOS REQUISITOS
+}
+
+// VERIFICA QUE CADA TIPO (DE POKEMON) DE LA LISTA SUMINISTRADA EXISTA EN LA TABLA DE TIPOS DE LA BD
+async function isExistingTipoBD(listTipos) {
+    for (let i = 0; i < listTipos.length; i++) {            //  POR CADA TIPO
+        const tipoBD = await Tipo.findByPk(listTipos[i])    // BUSCAMOS EN LA TABLA TIPO DE LA BD
+        if (!tipoBD) {
+            console.log(`NO EXISTE EL TIPO DE POKEMON: ${listTipos[i]}`)
+            return false
+        }                        // SI NO EXISTE RETORNAMOS FALSE
+    }
+
+    return true // SI LLEGA A ESTE PUNTO, SIGNIFICA QUE TODOS LOS TIPOS EXISTEN EN LA BD
 }
 
 // ################ PETICIONES #################### //
@@ -234,11 +247,26 @@ async function getPokemonById(idPokemon) {
 
 // RECIBE UN OBJETO Y CON SUS PROPIEDADES CREA UN POKEMON EN LA BD
 async function createPokemonBD(pokemonToCreate) {
-    if (!isValidPokemon(pokemonToCreate)) {
-        // throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA")
-        throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
-    }
+    //VERIFICAMOS QUE EL POKEMON A CREAR TENGA SUS PROPIEDADES COMPLETAS Y CUMPLAN CON EL TIPO DE DATO EXIGIDO
+    if (!isValidPokemon(pokemonToCreate)) throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
+    // VERIFICAMOS QUE LOS TIPOS A LOS QUE PERTENECE EL POKEMON EXISTAN REGISTRADOS EN LA BD (TABLA TIPOS)
+    if (!(await isExistingTipoBD(pokemonToCreate.tipos))) throw newError("LA INFORMACIÓN DE LOS TIPOS DEL POKEMON NO ES VÁLIDA", 400)
 
+    // VERIFICAMOS QUE NO EXISTA UN POKEMON CON ESE NOMBRE EN BD...
+    const queryPokemon = await Pokemon.findOne({ where: { nombre: pokemonToCreate.nombre.toLowerCase() } })
+    if (queryPokemon) throw newError("YA EXISTE UN POKEMON EN LA BD CON ESE NOMBRE", 400)
+
+    // ...NI EN LA POKEAPI
+    const namePokemon = pokemonToCreate.nombre
+    const queryPokemonPoke = await axios.get(`https://pokeapi.co/api/v2/pokemon/${namePokemon}`)
+        .catch(e => null)
+    // .then(r => { if (r.data.name === pokemonToCreate.nombre) throw newError("YA EXISTE UN POKEMON EN LA poke-api CON ESE NOMBRE", 400) })
+    // .catch(e => {   // SI POKEMON NO EXISTE NI EN BD NI EN POKE-API
+    //     throw newError(`No existe el pokemon llamado ${namePokemon}`, 404)
+    // })
+    if (queryPokemonPoke) throw newError("YA EXISTE UN POKEMON EN LA poke-api CON ESE NOMBRE", 400)
+
+    // CREAMOS AL POKEMON
     const newPokemon = await Pokemon.create({
         // id: INCREMENTAL,
         nombre: pokemonToCreate.nombre.toLowerCase(),
@@ -252,28 +280,26 @@ async function createPokemonBD(pokemonToCreate) {
     }
     )
 
-
     newPokemon.id2 = "A" + newPokemon.id    // AGREGAMOS EL ID2 AL POKEMON
-    await newPokemon.save()   // GUARDAMOS EL ID2
+    await newPokemon.save()   // GUARDAMOS LOS CAMBIOS
 
     // AGREGAMOS LOS TIPOS A LOS QUE PERTENECE EL POKEMON
     for (let i = 0; i < pokemonToCreate.tipos.length; i++) {
         const idTipo = pokemonToCreate.tipos[i]
         const tipoPokemonBD = await Tipo.findByPk(idTipo)
-        if (!tipoPokemonBD) throw newError(`NO EXISTE EL ID ${idTipo} DE TIPO DE POKEMON`, 400)
+        // if (!tipoPokemonBD) throw newError(`NO EXISTE EL ID ${idTipo} DE TIPO DE POKEMON`, 400)
         await newPokemon.addTipos(tipoPokemonBD)
     }
 
-
-
-    // pokemonToCreate.tipos.forEach(async (idTipo) => {
-    //     const tipoPokemonBD = await Tipo.findByPk(idTipo)
-    //     if (!tipoPokemonBD) throw newError("LA INFORMACIÓN DEL POKEMON NO ES VÁLIDA", 400)
-    //     await newPokemon.addTipos(tipoPokemonBD)
-
-    // })
-
-    console.log("POKEMON CREADO!")
+    // ##################### LOG ####################
+    console.log("")
+    console.log("┌──────────────────────────────────────────────")
+    console.log("│ POKEMON CREADO CON LOS SIGUIENTES DATOS:")
+    for (const [prop, value] of Object.entries(pokemonToCreate)) {
+        console.log(`│ * ${prop} --> ${value}`)
+    }
+    console.log("└──────────────────────────────────────────────")
+    console.log("")
     return
 }
 
