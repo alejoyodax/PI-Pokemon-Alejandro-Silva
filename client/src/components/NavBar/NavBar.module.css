@@ -1,0 +1,28 @@
+.header{
+    /* TAMÑO */
+    min-width:  290px;
+    width: 100%;
+    min-height: 4.4rem;
+
+    background-color: var(--bg-myWhite);
+    /* color: var(--color-primario); */
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    flex-wrap: wrap;
+    box-shadow: 0px 1px 15px 1px rgba(0, 0, 0, 0.3);
+    
+    position: sticky;
+    z-index: 2;
+    
+    top: 0px;
+
+    
+}
+
+.activeLink{
+    color: rgb(184, 20, 20);
+    font-weight: bold;
+}
