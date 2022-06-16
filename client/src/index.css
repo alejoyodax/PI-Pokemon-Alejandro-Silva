@@ -1,18 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Baumans&family=Bungee&family=Goldman&display=swap');
+
 body {
   margin: 0;
   background-color: var(--bg-myWhite);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Baumans', cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
 }
 
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */
 
 .normalizar{
   margin: 0;
@@ -32,6 +32,7 @@ code {
   --white5: #FFE391;
   --white6: #F9F871;
 
+  --gray-border: #F9F871;
 
 /* Switch Palette */
 --switch1: #393939;
@@ -51,4 +52,16 @@ code {
 --dot2: #FF00EF;
 --dot3: #D19F9C;
 
+--fromBD: #c74444;
+--fromPoke: #410dff;
+
+
+}
+
+.blur{
+  background: rgba( 230, 230, 230, 0.75 );
+/* box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ); */
+backdrop-filter: blur( 10px );
+-webkit-backdrop-filter: blur( 2px );
+/* border-radius: 10px; */
 }
