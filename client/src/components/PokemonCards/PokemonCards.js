@@ -5,11 +5,11 @@ import PokemonCard from '../PokemonCard/PokemonCard'
 
 const ITEMS_PER_PAGE = 12;
 
-function ControlsPaginated({ currentPage, nextHandler, prevHandler }) {
+function ControlsPaginated({ numberOfPages, currentPage, nextHandler, prevHandler }) {
     return (
         <div className={ styles.controlsPaginated }>
             <button onClick={ prevHandler } className={ styles.buttonPage }>Anterior</button>
-            <h3>{ `Página ${currentPage + 1}` }</h3>
+            <h3>{ `Página ${currentPage + 1} de ${numberOfPages}` }</h3>
             <button onClick={ nextHandler }>Siguiente</button>
         </div>
     )
@@ -19,6 +19,7 @@ function PokemonCards({ pokemonsToShow }) {
     const [pokemonsFromStore] = useState([...pokemonsToShow])
     const [items, setItems] = useState([...pokemonsFromStore].splice(0, ITEMS_PER_PAGE))
     const [currentPage, setCurrentPage] = useState(0)
+    const numberOfPages = Math.floor(pokemonsFromStore.length / ITEMS_PER_PAGE) + 1
 
     // HANDLERS PARA CAMBIAR DE PÁGINA
     const nextHandler = () => {
@@ -42,7 +43,7 @@ function PokemonCards({ pokemonsToShow }) {
 
     return (
         <div className={ styles.pokemonCardsContainer }>
-            <ControlsPaginated nextHandler={ nextHandler } prevHandler={ prevHandler } currentPage={ currentPage } />
+            <ControlsPaginated numberOfPages={ numberOfPages } nextHandler={ nextHandler } prevHandler={ prevHandler } currentPage={ currentPage } />
             {
                 items.map((p =>
                     <PokemonCard
@@ -56,7 +57,6 @@ function PokemonCards({ pokemonsToShow }) {
                     />
                 ))
             }
-            <ControlsPaginated nextHandler={ nextHandler } prevHandler={ prevHandler } currentPage={ currentPage } />
         </div>
     )
 }

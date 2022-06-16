@@ -1,6 +1,7 @@
 .pokemonCardsContainer{
     margin: 0px 0px;
     display: flex;
+    max-width: 1200px;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
@@ -9,15 +10,16 @@
 
     min-height: 100%;
 
-    border: 1px solid red;
+    /* border: 1px solid red; */
     
 }
 
 
 
 .controlsPaginated{
-    background-color: var(--bg-myWhite);
-    border: 1px solid blue;
+    /* background-color: var(--bg-myWhite); */
+    margin: 10px;
+    /* border: 1px solid blue; */
     width: 100%;
     /* height: 20px; */
 

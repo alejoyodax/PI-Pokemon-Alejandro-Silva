@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */ // PARA DESACTIVAR AVISO DE DEPENDENCIA OMITIDA EN USE-EFFECT
+
 import { useEffect } from "react"
-import { useState } from "react"
+// import { useState } from "react"
 import { connect } from "react-redux"
 import { getAllPokemons } from '../../redux/actions/getAllPokemons.js'
 import IsLoading from "../IsLoading/IsLoading.js"
@@ -13,7 +15,7 @@ function Pokemons({ pokemonsToShow, getAllPokemons, isLoading, isSuccesRequest }
     useEffect(() => {
         console.log("DID MOUNTED")
         if (pokemonsToShow.length === 0) getAllPokemons()
-    }, [pokemonsToShow, getAllPokemons]
+    }, [IsLoading]
     )
 
 
