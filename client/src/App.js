@@ -1,4 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import './App.css';
 // import NavBar from './components/NavBar/NavBar.js'
@@ -6,11 +8,20 @@ import Home from './components/Home/Home';
 import About from './components/About/About.js';
 import NotFound from './components/NotFound/NotFoundPage.js';
 import Homepage from './components/Homepage/Homepage.js';
-import Pokemons from './components/Inicio/Pokemons.js'
 import CreatePokemon from './components/CreatePokemon/CreatePokemon.js'
 import PokemonDetail from './components/PokemonDetail/PokemonDetail.js';
 
+//ACTIONS
+import { getAllPokemons } from './redux/actions/getAllPokemons';
+import Pokemons from './components/Pokemons/Pokemons';
+
 function App() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllPokemons())
+  }, [dispatch]
+  )
+
   return (
     <div className="App">
       <Routes>
