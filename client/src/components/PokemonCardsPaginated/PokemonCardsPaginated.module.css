@@ -1,0 +1,27 @@
+.pokemonCardsContainer{
+    margin: 0px 0px;
+    display: flex;
+    max-width: 1200px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    padding: 0rem;
+
+    min-height: 110%;
+
+    border: 2px solid rgb(75, 75, 223);    
+}
+
+.paginatedControlsContainer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid red;
+}
+
+.paginatedControlsContainer > h3{
+    margin: 10px 20px;
+    color: red;
+}

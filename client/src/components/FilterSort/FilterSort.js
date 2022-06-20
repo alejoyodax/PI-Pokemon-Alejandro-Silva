@@ -7,13 +7,13 @@ import { filterPokemons } from "../../redux/actions/filterPokemons"
 import { getPokemonTypes } from "../../redux/actions/getPokemonTypes"
 
 export default function FilterSort() {
-    // EJECUTAMOS LA ACCIÓN DE TRAER LOS TIPOS DE POKEMON DE LA API
+    let dispatch = useDispatch()
     useEffect(() => {
         dispatch(getPokemonTypes())
-    }, []
+    }, [dispatch]
     )
 
-    let dispatch = useDispatch()
+
     const pokemonTypes = useSelector(state => state.pokemonTypes)
     const valueOfSource = useRef()
     const valueOfType = useRef()
@@ -24,10 +24,7 @@ export default function FilterSort() {
     function handleFilterBySource(event) {
         const origen = valueOfSource.current.value
         const tipo = valueOfType.current.value
-
         dispatch(filterPokemons({ origen, tipo }))
-        // console.log("SOURCE REF:", valueOfSource.current.value)
-        // console.log("TYPE REF:", valueOfType.current.value)
     }
 
     return (
@@ -54,6 +51,8 @@ export default function FilterSort() {
                     }
                 </select>
             </div>
+
+
         </div>
     )
 }

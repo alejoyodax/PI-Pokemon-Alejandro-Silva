@@ -4,6 +4,7 @@ import {
     GET_ALL_POKEMONS,
     GET_POKEMON_TYPES,
     NOT_SUCCESFUL_RESPONSE,
+    RESET_FILTER,
     // GET_POKEMON_BY_ID,
     // GET_POKEMON_BY_NAME,
     // GET_POKEMON_TYPES,
@@ -59,7 +60,11 @@ export default function rootReducer(state = initialState, action) {
                 pokemonTypes: [...action.payload]
             }
 
-
+        case RESET_FILTER:
+            return {
+                ...state,
+                pokemonsToShow: [...state.pokemonsList]
+            }
 
         // SIEMPRE PONER CASO DEFAULT, O SI NO NINGUN COMPONENTE PUEDE ACCEDER AL ESTADO
         default:

@@ -35,12 +35,15 @@ export default function PokemonCard({ id, nombre, vida, fuerza, img, tipos }) {
     const isFromPokeApi = id[0] === "A" ? false : true
 
     return (
+
         <div className={ styles.PokemonCard }>
+
             <IdPokemon id={ id } isFromPokeApi={ isFromPokeApi } />
             <TitlePokemon nombre={ nombre } />
             <HR />
             <ImgPokemon img={ img } />
             <TiposPokemon tipos={ tipos } />
+
         </div>
     )
 }

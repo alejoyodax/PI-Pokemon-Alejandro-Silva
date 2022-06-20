@@ -1,4 +1,5 @@
 function filtroPorOrigen(origen, pokemon) {
+    if (origen === "Todos") return true
     if (origen === "Poke-Api") {
         // QUIERO PREGUNTAR SI ESE POKEMON ES DE LA POKE API
         if (pokemon.id[0] !== "A") return true
@@ -8,7 +9,7 @@ function filtroPorOrigen(origen, pokemon) {
         if (pokemon.id[0] === "A") return true
         return false
     }
-    if (origen === "Todos") return true
+
 }
 
 function filtroPorTipo(tipo, pokemon) {
@@ -31,7 +32,6 @@ export default function filterPokemons({ origen, tipo, pokemonsList }) {
             filtroPorOrigen(origen, pokemon) &&
             filtroPorTipo(tipo, pokemon)
         ) {
-            console.log("Cumple con la condición el pokemon: ", pokemon.nombre)
             return true
         } else { return false }
     })
