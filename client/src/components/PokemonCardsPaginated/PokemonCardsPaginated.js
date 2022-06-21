@@ -3,6 +3,8 @@ import styles from './PokemonCardsPaginated.module.css'
 
 // COMPONENTES
 import PokemonCard from '../PokemonCard/PokemonCard.js'
+import FilterSort from '../FilterSort/FilterSort'
+
 import { useState } from 'react'
 import { useEffect } from 'react'
 
@@ -16,34 +18,37 @@ export default function PokemonCardsPaginated() {
 
     // SOLO CUANDO LOS POKEMONES DEL "STORE" CAMBIAN Y LA CANTIDAD DE POKEMONES A MOSTRAR
     useEffect(() => {
-        console.log("pokemonsToShow: ", pokemonsToShow)
+        // console.log("PAGINAS MONTADA")
+        // console.log("pokemonsToShow: ", pokemonsToShow)
         setState([...pokemonsToShow])
-        setCurrentPage(0)
         setCurrentItems([...pokemonsToShow.slice(0, itemsPerPage)])
         setTotalPages(Math.floor(pokemonsToShow.length / itemsPerPage))
     }, [pokemonsToShow, itemsPerPage]
     )
 
-    // CUANDO LA PÁGINA ACTUAL CAMBIE
+    // CUANDO EL NÚMERO DE LA PÁGINA DE POKEMONES CAMBIE (cuando cambiemos la página)
     useEffect(() => {
         const newFirstIndex = currentPage * itemsPerPage
         setCurrentItems([...state.slice(newFirstIndex, newFirstIndex + itemsPerPage)])
-
     }, [currentPage, state, itemsPerPage]
     )
 
     const siguientePagina = () => {
-        console.log("-- SIGUIENTE PÁGINA")
-        if (currentPage === totalPages) return
-        console.log("AVANZA DE PÁGINA")
+        if (currentPage >= totalPages) return
+        // console.log("AVANZA DE PÁGINA")
         setCurrentPage(currentPage + 1)
     }
 
     const anteriorPagina = () => {
-        console.log("-- SIGUIENTE PÁGINA")
-        if (currentPage === 0) return
-        console.log("AVANZA DE PÁGINA")
+        if (currentPage <= 0) return
         setCurrentPage(currentPage - 1)
+    }
+
+    const setItemsPorPagina = (event) => {
+        setCurrentPage(0)
+        event.target.value === "Todos" ?
+            setItemsPerPage(9999) :
+            setItemsPerPage(parseInt(event.target.value))
     }
 
     const renderCards = () => {
@@ -62,17 +67,24 @@ export default function PokemonCardsPaginated() {
         )
     }
 
-    return (
-        <div className={ styles.pokemonCardsContainer } >
+    const RenderPageControls = () => {
+        return (
             <div className={ styles.paginatedControlsContainer }>
                 <button onClick={ anteriorPagina }>Anterior</button>
-                <h3>{ `Página ${currentPage + 1} de ${totalPages + 1}` }</h3>
+                <h3>{ `${state.length} pokemones - Página ${currentPage + 1} de ${totalPages + 1}` }</h3>
                 <button onClick={ siguientePagina }>Siguiente</button>
-            </div>
+            </div>)
+    }
 
+    return (
+        <div className={ styles.pokemonCardsContainer } >
+            <FilterSort setItemsPorPagina={ setItemsPorPagina } />
+            <RenderPageControls />
             {
-                currentItems && currentItems.length > 0 ? renderCards() : "No hay resultados para tus filtros :("
+                currentItems.length > 0 ? renderCards() : "No hay resultados para tus filtros :("
             }
+            { itemsPerPage > 12 ? <RenderPageControls /> : null }
         </div >
     )
 }
+

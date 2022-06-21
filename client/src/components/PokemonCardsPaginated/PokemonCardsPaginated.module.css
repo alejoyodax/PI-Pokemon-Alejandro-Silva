@@ -5,12 +5,12 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: flex-start;
 
     padding: 0rem;
 
-    min-height: 110%;
 
-    border: 2px solid rgb(75, 75, 223);    
+    /* border: 2px solid rgb(75, 75, 223);     */
 }
 
 .paginatedControlsContainer{
@@ -18,10 +18,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 
 .paginatedControlsContainer > h3{
     margin: 10px 20px;
-    color: red;
+    /* color: red; */
 }

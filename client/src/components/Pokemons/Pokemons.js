@@ -26,7 +26,6 @@ export default function Pokemons() {
 
     return (
         <div className={ styles.Pokemons }>
-            <FilterSort />
             { isLoading ? IsLoading(isSuccesRequest) : <PokemonCardsPaginated /> }
         </div>
     )
