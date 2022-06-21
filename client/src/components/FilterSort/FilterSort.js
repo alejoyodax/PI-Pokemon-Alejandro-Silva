@@ -28,9 +28,9 @@ export default function FilterSort({ setItemsPorPagina }) {
 
     return (
         <div className={ styles.filtersSortsContainer }>
-            <div>
+            <div className={ styles.s }>
                 <label>Origen de Pokemón</label>
-                <select ref={ valueOfSource } onChange={ (e) => { handleFilterBySource(e) } }>
+                <select className={ styles.select } ref={ valueOfSource } onChange={ (e) => { handleFilterBySource(e) } }>
                     <option>Todos</option>
                     <option>Poke-Api</option>
                     <option>Base de datos</option>
@@ -39,7 +39,7 @@ export default function FilterSort({ setItemsPorPagina }) {
 
             <div>
                 <label>Tipo</label>
-                <select ref={ valueOfType } onChange={ (e) => { handleFilterBySource(e) } }>
+                <select className={ styles.select } ref={ valueOfType } onChange={ (e) => { handleFilterBySource(e) } }>
                     <option>Todos</option>
                     { pokemonTypes.length === 0 ?
                         <option>Cargando...</option> :
@@ -50,13 +50,15 @@ export default function FilterSort({ setItemsPorPagina }) {
                 </select>
             </div>
 
-            <label>Items por página</label>
-            <select onChange={ (e) => setItemsPorPagina(e) }>
-                <option>12</option>
-                <option>24</option>
-                <option>48</option>
-                <option>Todos</option>
-            </select>
+            <div>
+                <label>Items por página</label>
+                <select className={ styles.select } onChange={ (e) => setItemsPorPagina(e) }>
+                    <option>12</option>
+                    <option>24</option>
+                    <option>48</option>
+                    <option>Todos</option>
+                </select>
+            </div>
 
 
         </div>

@@ -1,4 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 import styles from './PokemonCardsPaginated.module.css'
 
 // COMPONENTES
@@ -48,21 +49,23 @@ export default function PokemonCardsPaginated() {
         setCurrentPage(0)
         event.target.value === "Todos" ?
             setItemsPerPage(9999) :
-            setItemsPerPage(parseInt(event.target.value))
+            setItemsPerPage(parseInt(event.target.value)) // EL VALOR DEL SELECT ES UN STRING
     }
 
     const renderCards = () => {
         return (
             currentItems.map((p =>
-                <PokemonCard
-                    key={ p.id }
-                    id={ p.id }
-                    nombre={ p.nombre }
-                    vida={ p.vida }
-                    fuerza={ p.fuerza }
-                    img={ p.img }
-                    tipos={ p.tipos }
-                />
+                <Link style={ { textDecoration: 'none' } } to={ `detalle-pokemon/${p.id}` } key={ `link${p.id}${p.nombre}` }>
+                    <PokemonCard
+                        key={ `${p.id}${p.fuerza}${p.nombre}` }
+                        id={ p.id }
+                        nombre={ p.nombre }
+                        vida={ p.vida }
+                        fuerza={ p.fuerza }
+                        img={ p.img }
+                        tipos={ p.tipos }
+                    />
+                </Link>
             ))
         )
     }

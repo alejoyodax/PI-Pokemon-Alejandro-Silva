@@ -40,7 +40,7 @@ export default function PokemonCard({ id, nombre, vida, fuerza, img, tipos }) {
 
             <IdPokemon id={ id } isFromPokeApi={ isFromPokeApi } />
             <TitlePokemon nombre={ nombre } />
-            <HR />
+            <hr className={ styles.horizontalLine }></hr>
             <ImgPokemon img={ img } />
             <TiposPokemon tipos={ tipos } />
 

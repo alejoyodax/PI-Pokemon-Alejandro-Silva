@@ -17,17 +17,17 @@ export default function NavBar() {
 
             <nav className={ styles.navContainer }>
                 <ul>
-                    <li >
+                    <li className={ styles.liContainer }>
                         <NavLink className={ getColorIfActive }
                             to="pokemons" >Inicio</NavLink>
                     </li>
-                    <li>
+                    <li className={ styles.liContainer }>
                         <NavLink className={ getColorIfActive }
-                            to="create-pokemon">Crear pokemon</NavLink>
+                            to="crear-pokemon">Crear pokemon</NavLink>
                     </li>
-                    <li>
+                    <li className={ styles.liContainer }>
                         <NavLink className={ getColorIfActive }
-                            to="about">Acerca de</NavLink>
+                            to="acerca-de">Acerca de</NavLink>
                     </li>
 
                 </ul>

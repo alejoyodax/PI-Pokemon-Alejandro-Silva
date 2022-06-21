@@ -32,9 +32,9 @@ function App() {
         <Route path='/home' element={ <Home /> } >
           <Route path='' element={ <Navigate to="pokemons" /> } />
           <Route path='pokemons' element={ <Pokemons /> } />
-          <Route path='about' element={ <About /> } />
-          <Route path='create-pokemon' element={ <CreatePokemon /> } />
-          <Route path='pokemon-detail/:idPokemon' element={ <PokemonDetail /> } />
+          <Route path='acerca-de' element={ <About /> } />
+          <Route path='crear-pokemon' element={ <CreatePokemon /> } />
+          <Route path='detalle-pokemon/:idPokemon' element={ <PokemonDetail /> } />
         </Route>
 
         <Route path='*' element={ <NotFound /> } />

@@ -1,9 +1,37 @@
 .filtersSortsContainer{
-    width: 100%;
+    padding: 10px;
+    
+    max-width: 800px;
+    
     
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
     align-items: center;
     
+   
+    /* top: 0px; */
+    /* left: 20px; */
+    /* z-index: 5; */
     /* border: 2px solid red; */
+}
+
+
+.select{
+    padding: 5px;
+    font-size: 16px;
+    height: 100px;
+
+    border: 0px;
+    height: 34px;
+    
+    border-radius: 5px;
+    background-color:rgb(211, 211, 211);
+}
+
+.select > option {
+    text-rendering: optimizeLegibility;
+    border: 0px;
+    height: 300px;
+    background-color:rgb(211, 211, 211);
 }
