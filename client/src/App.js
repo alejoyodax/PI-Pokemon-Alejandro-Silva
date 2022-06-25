@@ -34,12 +34,12 @@ function App() {
           <Route path='pokemons' element={ <Pokemons /> } />
           <Route path='acerca-de' element={ <About /> } />
           <Route path='crear-pokemon' element={ <CreatePokemon /> } />
-          <Route path='detalle-pokemon/:idPokemon' element={ <PokemonDetail /> } />
+          <Route path='pokemon-detalle/:idPokemon' element={ <PokemonDetail /> } />
         </Route>
 
         <Route path='*' element={ <NotFound /> } />
       </Routes>
-    </div>
+    </div >
   );
 }
 

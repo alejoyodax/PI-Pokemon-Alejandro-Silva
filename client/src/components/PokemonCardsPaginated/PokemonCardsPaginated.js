@@ -55,7 +55,7 @@ export default function PokemonCardsPaginated() {
     const renderCards = () => {
         return (
             currentItems.map((p =>
-                <Link style={ { textDecoration: 'none' } } to={ `detalle-pokemon/${p.id}` } key={ `link${p.id}${p.nombre}` }>
+                <Link style={ { textDecoration: 'none' } } to={ `/home/pokemon-detalle/${p.id}` } key={ `link${p.id}${p.nombre}` }>
                     <PokemonCard
                         key={ `${p.id}${p.fuerza}${p.nombre}` }
                         id={ p.id }
@@ -86,7 +86,7 @@ export default function PokemonCardsPaginated() {
             {
                 currentItems.length > 0 ? renderCards() : "No hay resultados para tus filtros :("
             }
-            { itemsPerPage > 12 ? <RenderPageControls /> : null }
+            { currentItems.length > 12 ? <RenderPageControls /> : null }
         </div >
     )
 }

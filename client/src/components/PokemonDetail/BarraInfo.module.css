@@ -1,0 +1,57 @@
+.barraInfoContainer{
+    padding: 5px 25px 5px 45px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    /* border: 1px solid pink; */
+}
+.etiqueta{
+    font-size: 18px;
+}
+
+/* ESTILOS DE LOS INPUT RANGE */
+.barraInfo{
+    height: 14px;
+    overflow: hidden;
+    width: 150px;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border-radius: 30px;
+    border: 2px solid var(--fromPoke);
+    box-sizing: border-box;
+}
+.barraInfo::-webkit-slider-runnable-track {
+    width: 30px;
+    height: 10px;
+    -webkit-appearance: none;
+    color: #463cd3;
+    margin-top: 10px;
+}
+
+.barraInfo::-webkit-slider-thumb {
+    width: 0px;
+    -webkit-appearance: none;
+    height: 10px;
+    /* cursor: ew-resize; */
+    background: #434343;
+    box-shadow: -300px 0px 0 300px var(--fromPoke);
+}
+
+/* DESDE LA BD */
+
+.barraInfoBD{
+    composes: barraInfo;
+    border: 2px solid var(--fromBD);
+}
+
+.barraInfoBD::-webkit-slider-thumb {
+    width: 0px;
+    -webkit-appearance: none;
+    height: 10px;
+    /* cursor: ew-resize; */
+    background: #434343;
+    box-shadow: -300px 0px 0 300px var(--fromBD);
+}
+

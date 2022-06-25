@@ -19,26 +19,6 @@ let CACHE_POKEMON = [
                 nombre: 'poison'
             }
         ]
-    }, {
-        id: "A1",
-        nombre: 'alejoyop',
-        vida: 450,
-        fuerza: 490,
-        defensa: 409,
-        velocidad: 459,
-        altura: 79,
-        peso: 99,
-        img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg',
-        tipos: [
-            {
-                id: '12',
-                nombre: 'humano'
-            },
-            {
-                id: '4',
-                nombre: 'pereza'
-            }
-        ]
     },
     {
         id: 2,

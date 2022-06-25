@@ -41,7 +41,6 @@ export default function rootReducer(state = initialState, action) {
         case NOT_SUCCESFUL_RESPONSE:
             return {
                 ...state,
-                isLoading: false,
                 isSuccesRequest: false
             }
 

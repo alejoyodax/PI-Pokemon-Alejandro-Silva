@@ -4,5 +4,9 @@
 
     /* height: 800px; */
     /* z-index: 0; */
+    /* background-image: url("../../img/fondo.webp"); */
+    background-size: contain;
+    background-repeat: repeat;
+    
 
 }

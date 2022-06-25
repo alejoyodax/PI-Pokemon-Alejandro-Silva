@@ -24,6 +24,7 @@ body {
   # GRADIENTE GENÉRICA */
 :root {
   --bg-myWhite: #E6E6E6;
+  --card-border: #b9b9b9;
 
   --white1: #F2F2F2;
   --white2: #FFEBFF;
@@ -34,26 +35,27 @@ body {
 
   --gray-border: #F9F871;
 
-/* Switch Palette */
---switch1: #393939;
---switch2: #009063;
---switch3: #D6D4E6;
-  
-/* Small Switch Palette */
---small1: #A4F3F5;
---small2: #008C93;
+  /* Switch Palette */
+  --switch1: #393939;
+  --switch2: #009063;
+  --switch3: #D6D4E6;
+    
+  /* Small Switch Palette */
+  --small1: #A4F3F5;
+  --small2: #008C93;
 
-/* Squash Palette */
---squash1: #ECD1B5;
---squash2: #AFDEE5;
+  /* Squash Palette */
+  --squash1: #ECD1B5;
+  --squash2: #AFDEE5;
 
-/* Dotting Palette */
---dot1: #ACA7CB;
---dot2: #FF00EF;
---dot3: #D19F9C;
+  /* Dotting Palette */
+  --dot1: #ACA7CB;
+  --dot2: #FF00EF;
+  --dot3: #D19F9C;
 
---fromBD: #c74444;
---fromPoke: #410dff;
+  /* ÉNFASIS */
+  --fromBD: #c74444;
+  --fromPoke: #8179B7;
 
 
 }

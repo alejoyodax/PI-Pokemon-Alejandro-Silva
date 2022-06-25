@@ -22,12 +22,8 @@ function TiposPokemon({ tipos }) {
     )
 }
 
-function HR() {
-    return <hr className={ styles.horizontalLine } />
-}
-
 function IdPokemon({ id, isFromPokeApi }) {
-    const style = isFromPokeApi ? "BD" : "POKE-API"
+    const style = isFromPokeApi ? "POKE-API" : "BD"
     return (<h3 className={ styles[style] } >{ id }</h3>)
 }
 

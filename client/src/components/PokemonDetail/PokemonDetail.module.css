@@ -1,0 +1,188 @@
+.detailContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 80vh;
+    /* border: 1px solid blue; */
+
+    box-sizing: border-box;
+    color: var(--switch1);
+}
+
+/***********  ESTILOS CARTA Y DIVISIONES */
+
+.cardContainer{
+    padding: 15px;    
+    width: 90%;
+    max-width: 700px;
+    min-height: 300px; 
+
+    margin: 10px 10px 10px 10px; 
+
+    border: 1px solid #d1d1d1;
+    background-color: var(--white1);
+    /* background-color: white; */
+    border-radius: 1.7rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+
+    animation: aparicion;
+    animation-duration: 800ms;
+
+    box-shadow: 0px 5px 25px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader{
+    width: 100%;
+    min-height: 80px;
+    /* background-color: rgb(117, 117, 117); */
+
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    position: relative;
+}
+
+.cardBody{
+    width: 100%;
+    min-height: 300px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    /* border: 1px solid red; */
+    box-sizing: border-box;
+}
+
+.cardImg{    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 50%;
+    min-width: 280px;
+    max-width: 100%;
+
+    min-height: 300px;
+    /* background-color: rgb(117, 41, 41); */
+    box-sizing: border-box;
+    /* border: 1px solid green; */
+}
+
+.cardDetail{
+    margin: 0px;    
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%;
+    width: 50%;
+    min-width: 280px;
+    max-width: 100%;
+
+
+    min-height: 300px;
+    /* background-color: rgb(88, 70, 168); */
+    box-sizing: border-box;
+    /* border: 1px solid blue; */
+}
+
+
+/************  ESTILOS DE OBJETOS CONTENIDOS EN EL HEADER */
+.idPokemon{
+    position: absolute;
+    left: 10px;
+    top: -18px;
+}
+
+.cardHeader > h1 {
+    margin: 0;
+    
+}
+.cardHeader > hr{
+    width: 98%;
+}
+.origenContainer{
+    font-size: large;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid red; */
+}
+.origenContainer > p{
+    margin: 0;
+}
+.origen{
+    margin-left: 10px;
+    padding: 3px 9px;
+    /* border: 1px solid blue; */
+    border-radius: 20px;    
+    color: white;
+}
+
+
+
+/****  ESTILOS DE OBJETOS CONTENIDOS EN IMG */
+
+.img{
+    max-width: 200px;
+    max-height: 200px;
+}
+
+/**** ESTILOS DE OBJETOS CONTENIDOS EN CARD DETAIL */
+
+.cardDetailIn{
+    padding: 23px 0;
+    border-radius: 10px;
+    width: 100%;
+    border: 1px solid var(--card-border);
+}
+.cardDetailIn > hr{
+    width: 90%;
+}
+.pesoAltura{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.pesoAltura > h3{
+    margin: 0;
+    margin-top: 10px;
+}
+
+
+
+/* ************ ANIMACION TARJETA */
+@keyframes aparicion {
+    0% {
+        
+        opacity: 0;
+        position: relative;
+        bottom: 5px;
+    }
+
+    100%{
+        position: relative;
+        bottom: 0px;
+    }
+    
+}

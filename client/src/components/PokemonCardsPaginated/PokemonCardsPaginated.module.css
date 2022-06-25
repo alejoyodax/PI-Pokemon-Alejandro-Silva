@@ -12,6 +12,9 @@
 
     /* border: 2px solid rgb(75, 75, 223);     */
     text-decoration: none;
+
+    animation-name: aparicion;
+    animation-duration: 2s;
 }
 
 .paginatedControlsContainer{
@@ -25,4 +28,14 @@
 .paginatedControlsContainer > h3{
     margin: 10px 20px;
     /* color: red; */
+}
+
+@keyframes aparicion {
+    0% {
+        color: transparent;
+    }
+    100%{
+        
+    }
+    
 }

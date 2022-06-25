@@ -5,10 +5,8 @@ import styles from "./Pokemons.module.css"
 
 // IMPORTAR ACTIONS CREATORS
 // IMPORTAR COMPONENTES
-import PokemonCards from "../PokemonCards/PokemonCards.js"
 import PokemonCardsPaginated from "../PokemonCardsPaginated/PokemonCardsPaginated"
 import IsLoading from "../IsLoading/IsLoading.js"
-import FilterSort from "../FilterSort/FilterSort"
 
 import resetFilter from "../../redux/actions/resetFilter.js"
 

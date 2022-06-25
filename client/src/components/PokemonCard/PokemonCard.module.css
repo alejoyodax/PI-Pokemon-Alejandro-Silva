@@ -18,6 +18,9 @@
     position: relative;
     box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
     
+    animation-name: aparicion;
+    animation-duration: 300ms;
+
     transition-property: all;
     transition-duration: 150ms;
     transition-timing-function: linear;
@@ -89,5 +92,18 @@
         bottom: 5px;
         z-index: 10;
     }
+}
+
+@keyframes aparicion {
+    0% {
+        position: relative;
+        bottom: 5px;
+    }
+
+    100%{
+        position: relative;
+        bottom: 0px;
+    }
+    
 }
 

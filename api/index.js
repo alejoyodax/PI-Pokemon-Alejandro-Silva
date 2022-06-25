@@ -18,7 +18,8 @@
 //                       `=---='
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./src/app.js');
-const { conn, Tipo } = require('./src/db.js');
+const { createPokemonBD } = require('./src/controllers/pokemonController')
+const { conn, Tipo, Pokemon } = require('./src/db.js');
 const port = 3001
 
 // Syncing all the models at once.
@@ -50,5 +51,26 @@ conn.sync({ force: true }).then(() => {
     { idPokeApi: '10001', nombre: 'unknown' },
     { idPokeApi: '10002', nombre: 'shadow' }
   ])
+
+  createPokemonBD({
+    "nombre": "chavito",
+    "vida": 65,
+    "fuerza": 22,
+    "defensa": 36,
+    "velocidad": 12,
+    "img": "https://th.bing.com/th/id/R.a9ac53d309b55271e6241e9e8f55778b?rik=NXxYW2CxrltBgA&riu=http%3a%2f%2ffc03.deviantart.net%2ffs70%2ff%2f2014%2f275%2f1%2f8%2fpersonaje_el_chavo_animado_by_ncontreras207-d81du7u.png&ehk=VMcWhXhctGSida1RQRfr80HXb3NNPQAAvxsiOah02bk%3d&risl=&pid=ImgRaw&r=0",
+    "tipos": [7, 9]
+  })
+
+  createPokemonBD({
+    "nombre": "petrosky",
+    "vida": 89,
+    "fuerza": 120,
+    "defensa": 90,
+    "velocidad": 56,
+    "img": "https://i.pinimg.com/originals/eb/13/90/eb13901cf01d12db80a1d3856c2c8c12.png",
+    "tipos": [3, 1]
+  })
+
 
 });
